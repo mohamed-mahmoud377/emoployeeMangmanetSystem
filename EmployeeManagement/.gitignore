@@ -1,0 +1,73 @@
+# Ignore IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+*.vscode/
+
+# Ignore build directory (Maven / Gradle)
+target/
+build/
+
+# Ignore application properties that might contain sensitive information
+/application.properties
+/application.yml
+/config/application.properties
+/config/application.yml
+
+# Ignore log files
+*.log
+
+# Ignore compiled Java classes
+*.class
+
+# Ignore temporary files
+*.bak
+*.swp
+*~
+
+# Ignore local Maven repository (if not using a global repository)
+.m2/
+
+# Ignore dependency cache files
+.gradle/
+
+# Ignore compiled native binaries
+*.native
+
+# Ignore Dockerfile if it's only for local use and not needed in version control
+Dockerfile
+
+# Ignore IDE-specific files (IntelliJ IDEA, Eclipse, etc.)
+*.launch
+*.project
+*.classpath
+*.settings/
+
+# Ignore temporary files from text editors (e.g., Vim, Emacs)
+*.swp
+*~.nib
+
+# Ignore generated project files
+*.iml
+*.hprof
+
+# Ignore node modules if the project uses Node.js (e.g., for frontend tasks)
+node_modules/
+
+# Ignore dependency manager files (e.g., if using Gradle)
+.gradle/
+*.gradle
+
+# Ignore Spring Boot build artifact directories
+target/
+*.jar
+*.war
+*.ear
+
+# Ignore user-specific configuration files
+*.user
+*.db
+
+# Ignore .env files if used to store environment variables locally
+.env
