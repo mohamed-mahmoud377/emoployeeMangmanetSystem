@@ -1,9 +1,10 @@
-package com.example.employeemanagement.service.impl;
+package com.example.employeemanagement.service;
 
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.repository.EmployeeRepository;
 import com.example.employeemanagement.service.EmailService;
 import com.example.employeemanagement.service.ThirdPartyService;
+import com.example.employeemanagement.service.impl.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

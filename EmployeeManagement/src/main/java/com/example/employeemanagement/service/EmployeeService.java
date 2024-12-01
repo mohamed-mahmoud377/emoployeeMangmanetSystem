@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public interface EmployeeService {
     Employee createEmployee(ReqEmployee ReqEmployee);
-    Employee updateEmployee(UUID id, Employee employee);
-    void deleteEmployee(UUID id);
-    Employee getEmployeeById(UUID id);
+    Employee updateEmployee(Long id, ReqEmployee reqEmployee);
+    void deleteEmployee(Long id);
+    Employee getEmployeeById(Long id);
     List<Employee> getAllEmployees();
 }

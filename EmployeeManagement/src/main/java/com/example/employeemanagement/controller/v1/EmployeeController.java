@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/v1/employee")
 @Api(tags = "Employee Management API", description = "APIs for managing employees")
 public class EmployeeController {
 
@@ -35,7 +35,7 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Update employee")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable UUID id, @RequestBody Employee employee) {
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody ReqEmployee employee) {
         logger.info("Updating employee with ID: {}", id);
         Employee updatedEmployee = employeeService.updateEmployee(id, employee);
         return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
@@ -43,16 +43,14 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete employee")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable UUID id) {
-        logger.info("Deleting employee with ID: {}", id);
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get employee by ID")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id) {
-        logger.info("Fetching employee with ID: {}", id);
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         Employee employee = employeeService.getEmployeeById(id);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
@@ -60,7 +58,6 @@ public class EmployeeController {
     @GetMapping
     @ApiOperation(value = "Get all employees")
     public ResponseEntity<List<Employee>> getAllEmployees() {
-        logger.info("Fetching all employees");
         List<Employee> employees = employeeService.getAllEmployees();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }

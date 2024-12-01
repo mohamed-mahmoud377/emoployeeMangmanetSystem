@@ -1,6 +1,7 @@
 package com.example.employeemanagement.service.impl;
 
 import com.example.employeemanagement.dtos.v1.request.ReqEmployee;
+import com.example.employeemanagement.mapper.EmployeeMapper;
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.repository.EmployeeRepository;
 import com.example.employeemanagement.service.EmailService;
@@ -30,34 +31,34 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmailService emailService;
 
     @Override
-    public Employee createEmployee(ReqEmployee employee) {
-        logger.info("Creating new employee with email: {}", employee.getEmail());
+    public Employee createEmployee(ReqEmployee reqEmployee) {
 
-        if (!thirdPartyService.isEmailValid(employee.getEmail())) {
-            logger.error("Invalid email address provided: {}", employee.getEmail());
+        logger.trace("Creating new employee with email: {}", reqEmployee.getEmail());
+        if (!thirdPartyService.isEmailValid(reqEmployee.getEmail())) {
+            logger.error("Invalid email address provided: {}", reqEmployee.getEmail());
             throw new IllegalArgumentException("Invalid email address.");
         }
 
-        if (!thirdPartyService.isDepartmentValid(employee.getDepartment())) {
-            logger.error("Invalid department provided: {}", employee.getDepartment());
+        if (!thirdPartyService.isDepartmentValid(reqEmployee.getDepartment())) {
+            logger.error("Invalid department provided: {}", reqEmployee.getDepartment());
             throw new IllegalArgumentException("Invalid department.");
         }
 
-        Employee savedEmployee = employeeRepository.save(employee);
+        Employee savedEmployee = employeeRepository.save(EmployeeMapper.toEntity(reqEmployee));
         logger.info("Employee saved successfully with ID: {}", savedEmployee.getId());
 
-        String emailBody = String.format("Dear employee, your profile has been successfully created.", employee.getFirstName());
+        String emailBody = String.format("Dear employee, your profile has been successfully created.", reqEmployee.getFirstName());
         try {
-            emailService.sendEmail(employee.getEmail(), "Employee Creation Notification", emailBody);
+            emailService.sendEmail(savedEmployee.getEmail(), "Employee Creation Notification", emailBody);
         } catch (Exception e) {
-            logger.error("Failed to send email to: {}", employee.getEmail(), e);
+            logger.error("Failed to send email to: {}", savedEmployee.getEmail(), e);
         }
 
         return savedEmployee;
     }
 
     @Override
-    public Employee updateEmployee(UUID id, Employee employee) {
+    public Employee updateEmployee(Long id, ReqEmployee reqEmployee) {
         logger.info("Updating employee with ID: {}", id);
 
         Employee existingEmployee = employeeRepository.findById(id)
@@ -65,20 +66,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                     logger.error("Employee not found with ID: {}", id);
                     return new EmployeeNotFoundException("Employee not found with ID: " + id);
                 });
-        existingEmployee.setFirstName(employee.getFirstName());
-        existingEmployee.setLastName(employee.getLastName());
-        existingEmployee.setEmail(employee.getEmail());
-        existingEmployee.setDepartment(employee.getDepartment());
-        existingEmployee.setSalary(employee.getSalary());
 
-        Employee updatedEmployee = employeeRepository.save(existingEmployee);
+        Employee updatedEmployee = employeeRepository.save(EmployeeMapper.updateEntity(existingEmployee,reqEmployee));
         logger.info("Employee updated with ID: {}", updatedEmployee.getId());
 
         return updatedEmployee;
     }
 
     @Override
-    public void deleteEmployee(UUID id) {
+    public void deleteEmployee(Long id) {
         logger.info("Deleting employee with ID: {}", id);
 
         Employee employee = employeeRepository.findById(id)
@@ -90,7 +86,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee getEmployeeById(UUID id) {
+    public Employee getEmployeeById(Long id) {
         logger.info("Retrieving employee with ID: {}", id);
 
         Employee employee = employeeRepository.findById(id)
